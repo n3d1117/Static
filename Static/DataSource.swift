@@ -28,7 +28,7 @@ public class DataSource: NSObject {
     public var sections: [Section] {
         didSet {
             assert(NSThread.isMainThread(), "You must access Static.DataSource from the main thread.")
-            refresh()
+            refresh(oldValue)
         }
     }
 
@@ -83,9 +83,9 @@ public class DataSource: NSObject {
         refresh()
     }
 
-    private func refresh() {
-        refreshTableSections()
+    private func refresh(oldSections: [Section]? = nil) {
         refreshRegisteredCells()
+        refreshTableSections(oldSections)
     }
 
     private func sectionForIndex(index: Int) -> Section? {
@@ -111,7 +111,7 @@ public class DataSource: NSObject {
 
     private func refreshTableSections(oldSections: [Section]? = nil) {
         guard let tableView = tableView else { return }
-        guard let oldSections = oldSections else {
+        guard let oldSections = oldSections where !oldSections.isEmpty else {
             tableView.reloadData()
             return
         }
@@ -121,22 +121,34 @@ public class DataSource: NSObject {
         let delta = newCount - oldCount
         let animation: UITableViewRowAnimation = .Automatic
 
+        let changedSectionsIndexSet = NSMutableIndexSet()
+        
+        for i in 0..<min(oldCount, newCount) {
+            if sections[i] != oldSections[i] {
+                changedSectionsIndexSet.addIndex(i)
+            }
+        }
+        
+        
         tableView.beginUpdates()
 
         if delta == 0 {
-            tableView.reloadSections(NSIndexSet(indexesInRange: NSMakeRange(0, newCount)), withRowAnimation: animation)
+            
+            tableView.reloadSections(changedSectionsIndexSet, withRowAnimation: animation)
+            
         } else {
             if delta > 0 {
                 // Insert sections
-                tableView.insertSections(NSIndexSet(indexesInRange: NSMakeRange(oldCount - 1, delta)), withRowAnimation: animation)
+                let insertRange = NSIndexSet(indexesInRange: NSMakeRange(oldCount, delta))
+                tableView.insertSections(insertRange, withRowAnimation: animation)
             } else {
                 // Remove sections
-                tableView.deleteSections(NSIndexSet(indexesInRange: NSMakeRange(oldCount - 1, -delta)), withRowAnimation: animation)
+                let removeRange = NSIndexSet(indexesInRange: NSMakeRange(oldCount + delta, -delta))
+                tableView.deleteSections(removeRange, withRowAnimation: animation)
             }
 
             // Reload existing sections
-            let commonCount = min(oldCount, newCount)
-            tableView.reloadSections(NSIndexSet(indexesInRange: NSMakeRange(0, commonCount)), withRowAnimation: animation)
+            tableView.reloadSections(changedSectionsIndexSet, withRowAnimation: animation)
         }
 
         tableView.endUpdates()

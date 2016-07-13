@@ -161,9 +161,23 @@ public struct Row: Hashable, Equatable {
 
 
 public func ==(lhs: Row, rhs: Row) -> Bool {
-    return lhs.UUID == rhs.UUID
+    return lhs.text == rhs.text
+        && lhs.detailText == rhs.detailText
+        && lhs.accessory == rhs.accessory
+        && lhs.context == rhs.context
+        && lhs.image == rhs.image
+        && lhs.cellClass == rhs.cellClass
 }
 
+// Note: Can't make Any conform to Equatable
+// http://stackoverflow.com/questions/38352402/swift-how-to-compare-two-dictionarystring-any-structs
+
+extension Dictionary: Equatable {}
+
+public func ==<Key: Equatable, Value: Any>(lhs: [Key: Value], rhs: [Key: Value]) -> Bool {
+    return Array(lhs.keys) == Array(rhs.keys)
+//        && Array(lhs.values) == Array(rhs.values)
+}
 
 public func ==(lhs: Row.Accessory, rhs: Row.Accessory) -> Bool {
     switch (lhs, rhs) {

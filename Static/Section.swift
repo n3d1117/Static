@@ -6,7 +6,7 @@ public struct Section: Hashable, Equatable {
     // MARK: - Types
 
     /// Representation of a section header or footer.
-    public enum Extremity {
+    public enum Extremity: Equatable {
         /// System defined style for the title of the header or footer.
         case Title(String)
 
@@ -86,5 +86,16 @@ extension Section.Extremity: StringLiteralConvertible {
 
 
 public func ==(lhs: Section, rhs: Section) -> Bool {
-    return lhs.UUID == rhs.UUID
+    return lhs.rows == rhs.rows
+        && lhs.indexTitle == rhs.indexTitle
+        && lhs.header == rhs.header
+        && lhs.footer == rhs.footer
+}
+
+public func ==(lhs: Section.Extremity, rhs: Section.Extremity) -> Bool {
+    switch (lhs, rhs) {
+    case (.Title(let l), .Title(let r)): return l == r
+    case (.View(let l), .View(let r)): return l == r
+    default: return false
+    }
 }
