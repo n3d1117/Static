@@ -2,6 +2,7 @@ import UIKit
 
 /// Row or Accessory selection callback.
 public typealias Selection = () -> Void
+public typealias ValueChange = (Bool) -> ()
 
 /// Row copy callback
 public typealias CopyAction = (Row) -> Void
@@ -27,6 +28,9 @@ public struct Row: Hashable, Equatable {
 
         /// Info button. Handles selection.
         case detailButton(Selection)
+        
+        /// Switch. Handles value change.
+        case switchToggle(value: Bool, ValueChange)
 
         /// Custom view
         case view(UIView)
@@ -46,6 +50,8 @@ public struct Row: Hashable, Equatable {
         public var view: UIView? {
             switch self {
             case .view(let view): return view
+            case .switchToggle(let value, let valueChange):
+                return SwitchAccessory(initialValue: value, valueChange: valueChange)
             default: return nil
             }
         }
