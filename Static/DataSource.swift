@@ -246,7 +246,7 @@ extension DataSource: UITableViewDataSource {
         return row(at: indexPath)?.editActions.map {
             action in
             let rowAction = UITableViewRowAction(style: action.style, title: action.title) { (_, _) in
-                action.selection?()
+                action.selection?(indexPath)
             }
 
             // These calls have side effects when setting to nil
@@ -325,6 +325,7 @@ extension UITableView.Style {
         switch self {
         case .plain: return 0
         case .grouped: return UITableView.automaticDimension
+        @unknown default: return UITableView.automaticDimension
         }
     }
 }
