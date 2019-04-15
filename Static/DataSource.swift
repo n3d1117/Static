@@ -246,7 +246,7 @@ extension DataSource: UITableViewDataSource {
         return row(at: indexPath)?.editActions.map {
             action in
             let rowAction = UITableViewRowAction(style: action.style, title: action.title) { (_, _) in
-                action.selection?(indexPath)
+                action.selection?()
             }
 
             // These calls have side effects when setting to nil
