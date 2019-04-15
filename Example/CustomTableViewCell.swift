@@ -37,5 +37,6 @@ final class CustomTableViewCell: UITableViewCell, Cell {
 
     func configure(row: Row) {
         centeredLabel.text = row.text
+        accessibilityIdentifier = row.accessibilityIdentifier
     }
 }
