@@ -102,9 +102,6 @@ public struct Row: Hashable, Equatable {
 
     // MARK: - Properties
 
-    /// The row's accessibility identifier.
-    public var accessibilityIdentifier: String?
-
     /// Unique identifier for the row.
     public let uuid: String
 
@@ -151,16 +148,21 @@ public struct Row: Hashable, Equatable {
         return cellClass.description()
     }
 
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(uuid)
+    public var hashValue: Int {
+        return uuid.hashValue
     }
 
 
     // MARK: - Initializers
 
     public init(text: String? = nil, detailText: String? = nil, selection: Selection? = nil,
+<<<<<<< HEAD
                 image: UIImage? = nil, accessory: Accessory = .none, cellClass: Cell.Type? = nil, context: Context? = nil, editActions: [EditAction] = [], copyAction: CopyAction? = nil, uuid: String = UUID().uuidString, accessibilityIdentifier: String? = nil) {
         self.accessibilityIdentifier = accessibilityIdentifier
+=======
+        image: UIImage? = nil, accessory: Accessory = .none, cellClass: Cell.Type? = nil, context: Context? = nil, editActions: [EditAction] = [], copyAction: CopyAction? = nil, uuid: String = UUID().uuidString) {
+        
+>>>>>>> 609725c67dd1e9294c64f38da2278b0f39554018
         self.uuid = uuid
         self.text = text
         self.detailText = detailText
