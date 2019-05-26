@@ -1,7 +1,7 @@
 import UIKit
 
 /// Row or Accessory selection callback.
-public typealias Selection = () -> Void
+public typealias Selection = (Row) -> Void
 public typealias ValueChange = (Bool) -> ()
 
 /// Row copy callback
@@ -89,9 +89,9 @@ public struct Row: Hashable, Equatable {
         public let backgroundEffect: UIVisualEffect?
         
         /// Invoked when selecting the action.
-        public let selection: Selection?
+        public let selection: (() -> Void)?
         
-        public init(title: String, style: UITableViewRowAction.Style = .default, backgroundColor: UIColor? = nil, backgroundEffect: UIVisualEffect? = nil, selection: Selection? = nil) {
+        public init(title: String, style: UITableViewRowAction.Style = .default, backgroundColor: UIColor? = nil, backgroundEffect: UIVisualEffect? = nil, selection: (() -> Void)? = nil) {
             self.title = title
             self.style = style
             self.backgroundColor = backgroundColor

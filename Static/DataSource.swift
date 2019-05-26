@@ -291,7 +291,7 @@ extension DataSource: UITableViewDelegate {
         }
 
         if let row = row(at: indexPath) {
-            row.selection?()
+            row.selection?(row)
         }
 
         tableViewDelegate?.tableView?(tableView, didSelectRowAt: indexPath)
@@ -299,7 +299,7 @@ extension DataSource: UITableViewDelegate {
 
     public func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
         if let row = row(at: indexPath) {
-            row.accessory.selection?()
+            row.accessory.selection?(row)
         }
 
         tableViewDelegate?.tableView?(tableView, accessoryButtonTappedForRowWith: indexPath)
